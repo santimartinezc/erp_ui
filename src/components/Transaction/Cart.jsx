@@ -1,34 +1,34 @@
 //ProductTable
 import React, { useContext, useEffect, useState } from "react";
-import { ProductsContext } from "./ProductsContext";
-import ProductDetailModal from "./ProductDetailModal"; // Importa tu componente modal
+import { TransactionContext } from "./TransactionContext";
+import ProcessProductModal from "./ProcessProductModal"; // Importa tu componente modal
 
-const ProductsTable = () => {
+const TransactionTable = () => {
   const {
-    products,
-    fetchProducts,
+    productsInCart,
+    modalOpened,
     selectedProduct,
     handleProductClick,
+    handleOpenModal,
     handleCloseModal,
-    handleChangePage,
     handleDeleteProduct,
-    page,
-  } = useContext(ProductsContext);
+    handleAddProductToCart,
+    handleUpdateProductInCart,
+  } = useContext(TransactionContext);
 
-  const [productsToShow, setProductsToShow] = useState([]);
-  useEffect(() => {
-    console.log("Entra");
-    setProductsToShow(products);
-  }, [products]);
-
-  useEffect(() => {
-    fetchProducts(); // Esto se llamará cada vez que page cambie
-    setProductsToShow(products);
-  }, [page]); // Agregar page a la lista de dependencias
-
-  // Renderizar los productos
-  console.log(productsToShow);
-  if (!productsToShow) return <div>Loading</div>;
+  console.log("modalOpened:", modalOpened);
+  if (productsInCart.length == 0)
+    return (
+      <div>
+        Cesta de la compra vacía
+        <ProcessProductModal
+          product={selectedProduct}
+          onAdd={handleAddProductToCart}
+          onClose={handleCloseModal}
+          onDelete={handleDeleteProduct}
+        />
+      </div>
+    );
 
   return (
     <div>
@@ -45,7 +45,7 @@ const ProductsTable = () => {
               </tr>
             </thead>
             <tbody className="bg-white">
-              {productsToShow.map((product) => (
+              {productsInCart.map((product) => (
                 <tr
                   key={product.productId}
                   className="border-b cursor-pointer"
@@ -66,14 +66,20 @@ const ProductsTable = () => {
           </table>
         </div>
       </div>
+      {/* Botón para abrir el modal */}
       <div className="flex justify-center mt-4">
-        <button onClick={() => handleChangePage(page - 1)}>◀-  </button>
-        <p>{page}</p>
-        <button onClick={() => handleChangePage(page + 1)}> -▶</button>
+        <button
+          onClick={handleOpenModal}
+          className="bg-gray-800 hover:bg-gray-900 text-white font-bold py-2 px-4"
+        >
+          +
+        </button>
       </div>
-      {selectedProduct && (
-        <ProductDetailModal
+      {modalOpened && (
+        <ProcessProductModal
           product={selectedProduct}
+          onAdd={handleAddProductToCart}
+          onModify={handleUpdateProductInCart}
           onClose={handleCloseModal}
           onDelete={handleDeleteProduct}
         />
@@ -82,4 +88,4 @@ const ProductsTable = () => {
   );
 };
 
-export default ProductsTable;
+export default TransactionTable;

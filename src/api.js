@@ -23,6 +23,16 @@ export const getProductByIdAPI = async (id) => {
   }
 };
 
+// Obtener un producto por ID
+export const getProductByBarCodeAPI = async (id) => {
+  try {
+    const response = await axios.get(`${API_URL}/barCode/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error al obtener el producto", error);
+  }
+};
+
 // Crear un nuevo producto
 export const createProductAPI = async (productData) => {
   try {

@@ -1,7 +1,9 @@
+//ProductContext
 import { createContext, useState, useEffect, useContext } from "react";
 import {
   deleteProductAPI,
   getAllProductsAPI,
+  getProductByBarCodeAPI,
   getProductByIdAPI,
 } from "../../api"; // Asume que las funciones están en services/productService.js
 export const ProductsContext = createContext();
@@ -45,6 +47,12 @@ export function ProductsContextProvider(props) {
     setProducts(fetchedProducts);
   };
 
+  const handleSearch = async (barCode) => {
+    const fetchedProduct = await getProductByBarCodeAPI(barCode);
+    setSelectedProduct(fetchedProduct);
+    console.log(fetchedProduct)
+  };
+
   const updateProductInList = (updatedProduct) => {
     setProducts(
       products.map((product) => {
@@ -68,6 +76,7 @@ export function ProductsContextProvider(props) {
         updateProductInList,
         page,
         handleChangePage,
+        handleSearch,
       }}
     >
       {props.children}
