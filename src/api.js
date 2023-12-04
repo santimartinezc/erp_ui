@@ -1,12 +1,16 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API_URL = 'http://localhost:8080/api/products'; // Asegúrate de que la URL coincida con la de tu servidor
+const URL_PRODUCTS = "http://localhost:8080/api/products"; // Asegúrate de que la URL coincida con la de tu servidor
+const URL_TRANSACTIONS = "http://localhost:8080/api/transactions"; // Asegúrate de que la URL coincida con la de tu servidor
+const URL_LINES = "http://localhost:8080/api/lines"; // Asegúrate de que la URL coincida con la de tu servidor
 
 // Obtener todos los productos
 export const getAllProductsAPI = async (page) => {
   try {
-    // const response = await axios.get(API_URL);
-    const response = await axios.get(`http://localhost:8080/api/products?page=${page}&size=20`);
+    // const response = await axios.get(URL_PRODUCTS);
+    const response = await axios.get(
+      `http://localhost:8080/api/products?page=${page}&size=20`
+    );
     return response.data.content;
   } catch (error) {
     console.error("Error al obtener los productos", error);
@@ -16,7 +20,7 @@ export const getAllProductsAPI = async (page) => {
 // Obtener un producto por ID
 export const getProductByIdAPI = async (id) => {
   try {
-    const response = await axios.get(`${API_URL}/${id}`);
+    const response = await axios.get(`${URL_PRODUCTS}/${id}`);
     return response.data;
   } catch (error) {
     console.error("Error al obtener el producto", error);
@@ -26,7 +30,7 @@ export const getProductByIdAPI = async (id) => {
 // Obtener un producto por ID
 export const getProductByBarCodeAPI = async (id) => {
   try {
-    const response = await axios.get(`${API_URL}/barCode/${id}`);
+    const response = await axios.get(`${URL_PRODUCTS}/barCode/${id}`);
     return response.data;
   } catch (error) {
     console.error("Error al obtener el producto", error);
@@ -36,7 +40,7 @@ export const getProductByBarCodeAPI = async (id) => {
 // Crear un nuevo producto
 export const createProductAPI = async (productData) => {
   try {
-    const response = await axios.post(API_URL, productData);
+    const response = await axios.post(URL_PRODUCTS, productData);
     return response.data;
   } catch (error) {
     console.error("Error al crear el producto", error);
@@ -46,7 +50,7 @@ export const createProductAPI = async (productData) => {
 // Actualizar un producto
 export const updateProductAPI = async (id, productData) => {
   try {
-    const response = await axios.put(`${API_URL}/${id}`, productData);
+    const response = await axios.put(`${URL_PRODUCTS}/${id}`, productData);
     return response.data;
   } catch (error) {
     console.error("Error al actualizar el producto", error);
@@ -56,8 +60,57 @@ export const updateProductAPI = async (id, productData) => {
 // Eliminar un producto
 export const deleteProductAPI = async (id) => {
   try {
-    await axios.delete(`${API_URL}/${id}`);
+    await axios.delete(`${URL_PRODUCTS}/${id}`);
   } catch (error) {
     console.error("Error al eliminar el producto", error);
+  }
+};
+
+export const createTransactionAPI = async (transactionData) => {
+  try {
+    const response = await axios.post(URL_TRANSACTIONS, transactionData);
+    return response.data.transactionId;
+  } catch (error) {
+    console.error("Error al crear la transacción", error);
+  }
+};
+
+export const getAllTransactionsAPI = async (page) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:8080/api/transactions?page=${page}&size=20`
+      );
+    return response.data;
+  } catch (error) {
+    console.error("Error al obtener las transacciones", error);
+  }
+};
+
+export const deleteTransactionAPI = async (transactionId) => {
+  try {
+    await axios.delete(`${URL_TRANSACTIONS}/${transactionId}`);
+  } catch (error) {
+    console.error("Error al eliminar la transacción", error);
+  }
+};
+
+export const createLinesAPI = async (lines, transactionId) => {
+  try {
+    const response = await axios.post(URL_LINES + "/multiple", lines);
+    return response.data;
+  } catch (error) {
+    deleteTransactionAPI(transactionId);
+    console.error("Error al crear la transacción", error);
+  }
+};
+
+
+export const getLinesByTransactionIdAPI = async (id) => {
+  try {
+    const response = await axios.get(`${URL_LINES}/transaction/${id}`);
+    console.log(response.data)
+    return response.data;
+  } catch (error) {
+    console.error("Error al obtener las líneas de la transacción", error);
   }
 };

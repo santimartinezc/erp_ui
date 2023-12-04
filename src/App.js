@@ -12,7 +12,7 @@ import ProductView from "./components/Products/ProductView";
 import ReactDOM from "react-dom/client";
 
 import TransactionView from "./components/Transaction/TransactionView";
-// import HistoryView from "./components/History/HistoryView";
+import HistoryView from "./components/History/HistoryView";
 
 const App = () => {
   return (
@@ -23,7 +23,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<ProductView />} />
             <Route path="/productos" element={<ProductView />} />
-            {/* <Route path="/historial" element={<HistoryView />} /> */}
+            <Route path="/historico" element={<HistoryView />} />
             <Route path="/venta" element={<TransactionView />} />
           </Routes>
         </div>

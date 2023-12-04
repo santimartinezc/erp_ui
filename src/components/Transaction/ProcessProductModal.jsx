@@ -7,6 +7,7 @@ const ProductDetailModal = ({
   onAdd,
   onClose,
   onModify,
+  onFinishTransaction,
   onDelete,
 }) => {
   const { handleUpdateProductInCart, handleSearch, selectedProduct } =
@@ -42,7 +43,10 @@ const ProductDetailModal = ({
     }
   }, [product]);
   useEffect(() => {
-    if (selectedProduct) setprocessingProduct(selectedProduct);
+    if (selectedProduct) {
+      selectedProduct.quantity=1;
+      setprocessingProduct(selectedProduct);
+    }
   }, [selectedProduct]);
 
   const handleChange = (e) => {
@@ -69,14 +73,18 @@ const ProductDetailModal = ({
   };
 
   const isFormValid = () => {
-    return processingProduct.productName && processingProduct.price;
+    return (
+      processingProduct.productName &&
+      processingProduct.price &&
+      processingProduct.quantity
+    );
   };
   const isButtonDisabled = !isFormValid();
 
   console.log(processingProduct);
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex justify-center items-center">
-      <div className="bg-white p-5 shadow-lg w-1/2">
+      <div className="bg-white p-5 shadow-lg w-1/3">
         {!editing && (
           <div className="flex w-full px-4 py-6 bg-white  max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl">
             {/* <div className="flex"> */}
@@ -100,7 +108,7 @@ const ProductDetailModal = ({
         )}
         <form onSubmit={handleSubmit}>
           {/* Campos del formulario */}
-          <div className="mb-4">
+          <div className="mb-1">
             <label className="block">Nombre del Producto</label>
             <input
               type="text"
@@ -110,38 +118,39 @@ const ProductDetailModal = ({
               className="w-full p-2 border border-gray-300 mt-1"
             />
           </div>
-          <div className="mb-4">
-            <label className="block">Precio (€)</label>
-            <input
-              type="text"
-              name="price"
-              value={processingProduct.price}
-              onChange={handleChange}
-              className="w-full p-2 border border-gray-300 mt-1"
-            />
+          <div className="flex">
+            <div className="mb-1 mr-2">
+              <label className="block">Precio (€)</label>
+              <input
+                type="text"
+                name="price"
+                value={processingProduct.price}
+                onChange={handleChange}
+                className="w-full p-2 border border-gray-300 mt-1"
+              />
+            </div>
+            <div className="mb-1 mr-2">
+              <label className="block">Cantidad</label>
+              <input
+                type="text"
+                name="quantity"
+                value={processingProduct.quantity}
+                onChange={handleChange}
+                className="w-full p-2 border border-gray-300 mt-1"
+              />
+            </div>
+            <div className="mb-1 ">
+              <label className="block">Impuestos (%)</label>
+              <input
+                type="text"
+                name="quantity"
+                value={processingProduct.taxes_pctg}
+                onChange={handleChange}
+                className="w-full p-2 border border-gray-300 mt-1"
+              />
+            </div>
           </div>
-          <div className="mb-4">
-            <label className="block">Cantidad</label>
-            <input
-              type="text"
-              name="quantity"
-              value={processingProduct.quantity}
-              onChange={handleChange}
-              className="w-full p-2 border border-gray-300 mt-1"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block">Impuestos (%)</label>
-            <input
-              type="text"
-              name="quantity"
-              value={processingProduct.taxes_pctg}
-              onChange={handleChange}
-              className="w-full p-2 border border-gray-300 mt-1"
-            />
-          </div>
-          {/* Agrega más campos según sea necesario */}
-          <div className="flex justify-between">
+          <div className="flex justify-between mt-3">
             <div>
               {!editing && (
                 <button
@@ -158,14 +167,14 @@ const ProductDetailModal = ({
                   type="button"
                   className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700 ml-2"
                 >
-                  Cancelar
+                  Cerrar
                 </button>
               )}
               {editing && (
                 <button
                   onClick={() => {
                     onModify(processingProduct);
-                  }} // onClick={onClose}
+                  }}
                   type="button"
                   className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 ${isButtonDisabled ? 'opacity-50 cursor-not-allowed'"
                   disabled={isButtonDisabled}
@@ -177,7 +186,7 @@ const ProductDetailModal = ({
 
             {!editing && (
               <button
-                onClick={() => {}}
+                onClick={onFinishTransaction}
                 type="button"
                 className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700 ml-2"
               >

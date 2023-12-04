@@ -1,10 +1,17 @@
 //ProductContext
 import { createContext, useState, useEffect, useContext } from "react";
-import { getProductByBarCodeAPI } from "../../api"; // Asume que las funciones están en services/Transactionervice.js
+import {
+  createLinesAPI,
+  createTransactionAPI,
+  getAllTransactionsAPI,
+  getProductByBarCodeAPI,
+} from "../../api"; // Asume que las funciones están en services/Transactionervice.js
 export const TransactionContext = createContext();
 
 export function TransactionContextProvider(props) {
   const [modalOpened, setModalOpened] = useState(true);
+  const [endOfTransactionModalOpened, setEndOfTransactionModalOpened] =
+    useState(false);
   const [productsInCart, setProductsInCart] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState({
     productName: "",
@@ -13,10 +20,14 @@ export function TransactionContextProvider(props) {
     quantity: "",
     taxes_pctg: "",
   });
+  const totalAmount = productsInCart.reduce(
+    (sum, product) => sum + product.price * product.quantity,
+    0
+  );
 
   const handleProductClick = (product) => {
     setSelectedProduct(product);
-    setModalOpened(true)
+    setModalOpened(true);
   };
 
   const handleAddProductToCart = (product) => {
@@ -52,6 +63,10 @@ export function TransactionContextProvider(props) {
     setModalOpened(true);
   };
 
+  const handleOpenEndOfTransactionModal = () => {
+    setEndOfTransactionModalOpened(true);
+  };
+
   const handleDeleteProduct = async () => {
     console.log("sacar producto del carrito:", selectedProduct);
     setSelectedProduct({
@@ -75,7 +90,7 @@ export function TransactionContextProvider(props) {
   };
 
   const handleUpdateProductInCart = (updatedProduct) => {
-    console.log("entra")
+    console.log("entra");
     setProductsInCart(
       productsInCart.map((product) => {
         if (product.productId === updatedProduct.productId) {
@@ -84,7 +99,38 @@ export function TransactionContextProvider(props) {
         return product;
       })
     );
-    setModalOpened(false)
+    setModalOpened(false);
+  };
+
+  const handleCancelEndOfTransaction = () => {
+    setEndOfTransactionModalOpened(false);
+  };
+  const handleFinishTransaction = async () => {
+    const transaction = {
+      vendorId: 1,
+      totalAmount: totalAmount,
+    };
+    const transactionId = await createTransactionAPI(transaction);
+    if (transactionId) {
+      const lines = productsInCart.map(({ barCode, ...item }) => ({
+        ...item,
+        transactionId: transactionId,
+      }));
+      createLinesAPI(lines, transactionId);
+    }
+
+    setModalOpened(true);
+    setEndOfTransactionModalOpened(false);
+    setProductsInCart([]);
+    setSelectedProduct({
+      productName: "",
+      barCode: "",
+      price: "",
+      quantity: "",
+      taxes_pctg: "",
+    });
+    setEndOfTransactionModalOpened(false);
+    getAllTransactionsAPI(1)
   };
 
   return (
@@ -101,6 +147,11 @@ export function TransactionContextProvider(props) {
         handleUpdateProductInCart,
         handleSearch,
         handleAddProductToCart,
+        handleOpenEndOfTransactionModal,
+        endOfTransactionModalOpened,
+        totalAmount,
+        handleFinishTransaction,
+        handleCancelEndOfTransaction,
       }}
     >
       {props.children}
