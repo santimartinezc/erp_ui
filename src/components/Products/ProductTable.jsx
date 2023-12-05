@@ -28,7 +28,7 @@ const ProductsTable = () => {
 
   // Renderizar los productos
   console.log(productsToShow);
-  if (!productsToShow) return <div>Loading</div>;
+  if (!productsToShow) return <div>Cargando...</div>;
 
   return (
     <div>
@@ -54,7 +54,7 @@ const ProductsTable = () => {
                   <td className="px-4 py-2 border">{product.productId}</td>
                   <td className="px-4 py-2 border">{product.productName}</td>
                   <td className="px-4 py-2 border">
-                    {product.price.toFixed(2)}€
+                    {parseFloat(product.price).toFixed(2)}€
                   </td>
                   <td className="px-4 py-2 border">{product.quantity}</td>
                   <td className="px-4 py-2 border">

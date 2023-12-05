@@ -2,6 +2,7 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import {
   deleteTransactionAPI,
+  fetchTransactionsBetweenDates,
   getAllTransactionsAPI,
   getLinesByTransactionIdAPI,
 } from "../../api"; // Asume que las funciones están en services/transactionservice.js
@@ -12,6 +13,12 @@ export function HistoryContextProvider(props) {
   const [transactions, setTransactions] = useState([]);
   const [selectedTransaction, setSelectedTransaction] = useState(null);
   const [productsInTransaction, setProductsInTransaction] = useState(null);
+  const [startDate, setStartDate] = useState(
+    new Date().toISOString().split(".")[0]
+  );
+  const [endDate, setEndDate] = useState(
+    new Date().toISOString().split(".")[0]
+  );
 
   console.log("History Context");
   const handleTransactionClick = (transaction) => {
@@ -22,7 +29,7 @@ export function HistoryContextProvider(props) {
     if (newPage >= 0) {
       // Asegúrate de que la nueva página no sea negativa
       setPage(newPage);
-      await fetchTransactions(); // Espera a que fetchtransactions se complete
+      await fetchTransactionsFiltered(); // Espera a que fetchtransactions se complete
     }
   };
 
@@ -37,12 +44,15 @@ export function HistoryContextProvider(props) {
     if (confirmDelete) {
       await deleteTransactionAPI(selectedTransaction.transactionId);
       setSelectedTransaction(null);
-      await fetchTransactions();
+      await fetchTransactionsFiltered();
     }
   };
 
-  const fetchTransactions = async () => {
-    const fetchedtransactions = await getAllTransactionsAPI(page);
+  const fetchTransactionsFiltered = async () => {
+    const fetchedtransactions = await fetchTransactionsBetweenDates(
+      new Date(startDate).toISOString().split(".")[0],
+      new Date(endDate).toISOString().split(".")[0]
+    );
     setTransactions(fetchedtransactions);
   };
 
@@ -59,7 +69,7 @@ export function HistoryContextProvider(props) {
 
   const handleFindTransactionDetais = async (transactionId) => {
     const transactionDetails = await getLinesByTransactionIdAPI(transactionId);
-    console.log(transactionDetails)
+    console.log(transactionDetails);
     setProductsInTransaction(transactionDetails);
   };
 
@@ -67,7 +77,7 @@ export function HistoryContextProvider(props) {
     <HistoryContext.Provider
       value={{
         transactions,
-        fetchTransactions,
+        fetchTransactionsFiltered,
         selectedTransaction,
         handleTransactionClick,
         handleCloseModal,
@@ -77,6 +87,10 @@ export function HistoryContextProvider(props) {
         handleChangePage,
         productsInTransaction,
         handleFindTransactionDetais,
+        startDate,
+        setStartDate,
+        endDate,
+        setEndDate,
       }}
     >
       {props.children}

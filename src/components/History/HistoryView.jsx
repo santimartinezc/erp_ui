@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { HistoryContextProvider } from "./HistoryContext";
 import HistoryTable from "./HistoryTable";
 import Menu from "./Menu";
+import HistoryGraphs from "./HistoryGraphs";
 
 const ProductView = () => {
   const [activeSection, setActiveSection] = useState("Inicio");
@@ -10,8 +11,8 @@ const ProductView = () => {
     switch (activeSection) {
       case "transactions":
         return <HistoryTable />;
-      case "graphs":
-        return <div>Contenido de Gráficos</div>;
+        case "graphs":
+        return <HistoryGraphs />;
       default:
         return <HistoryTable />;
     }

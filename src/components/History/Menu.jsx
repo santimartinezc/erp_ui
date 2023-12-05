@@ -3,7 +3,7 @@ import { HistoryContext } from "./HistoryContext";
 
 const Menu = ({setActiveSection }) => {
   return (
-    <div className="w-1/5 h-screen bg-gray-800 text-white">
+    <div className="w-1/5 bg-gray-800 text-white">
       <div className="flex flex-col justify-center items-center py-10">
         <h1 className="text-3xl font-bold mb-8">Histórico</h1>
       </div>

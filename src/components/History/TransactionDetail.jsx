@@ -12,7 +12,7 @@ const TransactionDetail = () => {
     console.log("ProductsInTransaction:", productsInTransaction);
   }, [productsInTransaction]);
 
-  if (!productsInTransaction) return <div>Loading</div>;
+  if (!productsInTransaction) return <div>Cargando...</div>;
 
   return (
     <div className="flex justify-center text-sm">
@@ -39,7 +39,7 @@ const TransactionDetail = () => {
                   {product.taxes_pctg.toFixed(2)}%
                 </td>
                 <td className="px-1 border">
-                  {product.quantity * product.price}
+                  {(product.quantity * product.price).toFixed(2)}
                 </td>
               </tr>
             ))}

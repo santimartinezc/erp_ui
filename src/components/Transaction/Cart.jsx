@@ -61,14 +61,14 @@ const TransactionTable = () => {
                 <td className="px-4 py-2 border">{product.productId}</td>
                 <td className="px-4 py-2 border">{product.productName}</td>
                 <td className="px-4 py-2 border">
-                  {product.price.toFixed(2)}€
+                  {parseFloat(product.price).toFixed(2)}€
                 </td>
                 <td className="px-4 py-2 border">{product.quantity}</td>
                 <td className="px-4 py-2 border">
                   {product.taxes_pctg.toFixed(2)}%
                 </td>
                 <td className="px-4 py-2 border">
-                  {product.quantity * product.price}
+                  {(product.quantity * product.price).toFixed(2)}
                 </td>
               </tr>
             ))}
@@ -76,7 +76,7 @@ const TransactionTable = () => {
         </table>
         <div className="flex justify-end bg-blue-500 text-xl font-bold">
           <h2 className="mr-4">IMPORTE TOTAL: </h2>
-          <h2 className="mr-4">{totalAmount} € </h2>
+          <h2 className="mr-4">{totalAmount.toFixed(2)} € </h2>
         </div>
 
         <div className="flex justify-center mt-4">

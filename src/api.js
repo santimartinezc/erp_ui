@@ -86,6 +86,20 @@ export const getAllTransactionsAPI = async (page) => {
   }
 };
 
+export const fetchTransactionsBetweenDates = async (startDate, endDate) => {
+  try {
+      const response = await axios.get('http://localhost:8080/api/transactions/filter', {
+          params: {
+              createdAtStart: startDate,
+              createdAtEnd: endDate
+          }
+      });
+      return response.data;
+  } catch (error) {
+      console.error("Error fetching transactions", error);
+  }
+};
+
 export const deleteTransactionAPI = async (transactionId) => {
   try {
     await axios.delete(`${URL_TRANSACTIONS}/${transactionId}`);

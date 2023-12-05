@@ -2,23 +2,36 @@
 import React, { useContext, useEffect, useState } from "react";
 import { HistoryContext } from "./HistoryContext";
 import TransactionDetail from "./TransactionDetail";
+import { fetchTransactionsBetweenDates } from "../../api";
 
 const HistoryTable = () => {
-  const { transactions, fetchTransactions, page, handleFindTransactionDetais } =
-    useContext(HistoryContext);
+  const {
+    transactions,
+    startDate,
+    setStartDate,
+    endDate,
+    setEndDate,
+    fetchTransactionsFiltered,
+    handleFindTransactionDetais,
+  } = useContext(HistoryContext);
   const [transactionsToShow, setTransactionsToShow] = useState([]);
   const [selectedTransaction, setSelectedTransaction] = useState(null);
 
+  const [totalAmountRange, setTotalAmountRange] = useState(0);
+
+  useEffect(() => {
+    fetchTransactionsFiltered();
+  }, []);
+
   useEffect(() => {
     setTransactionsToShow(transactions);
+    setTotalAmountRange(
+      transactions.reduce(
+        (sum, transaction) => sum + transaction.totalAmount,
+        0
+      )
+    );
   }, [transactions]);
-
-  useEffect(() => {
-    fetchTransactions(); // Esto se llamará cada vez que page cambie
-    setTransactionsToShow(transactions);
-  }, [page]); // Agregar page a la lista de dependencias
-
-  if (!transactionsToShow) return <div>Loading</div>;
 
   const handleRowClick = async (transactionId) => {
     setSelectedTransaction(
@@ -27,11 +40,48 @@ const HistoryTable = () => {
     await handleFindTransactionDetais(transactionId);
   };
 
+  const filterTransactions = async () => {
+    console.log("Entra a filtrar");
+    const filtered = await fetchTransactionsBetweenDates(new Date(startDate).toISOString().split(".")[0], new Date(endDate).toISOString().split(".")[0]);
+    setTransactionsToShow(filtered);
+    setTotalAmountRange(
+      filtered.reduce((sum, transaction) => sum + transaction.totalAmount, 0)
+    );
+  };
   console.log(transactionsToShow);
+
+  if (!transactionsToShow) return <div>Cargando...</div>;
   return (
     <div>
+      <div className="flex items-center justify-center pt-4">
+        <input
+          type="date"
+          value={new Date(startDate).toISOString().split("T")[0]}
+          onChange={(e) => setStartDate(e.target.value)}
+          className="mx-2 p-2 border border-gray-300 rounded shadow-sm"
+          />
+        <input
+          type="date"
+          value={new Date(endDate).toISOString().split("T")[0]}
+          onChange={(e) => setEndDate(e.target.value)}
+          className="p-2 border border-gray-300 rounded shadow-sm"
+        />
+
+        <button
+          onClick={filterTransactions}
+          className="mx-4 px-4 py-2 bg-gray-800 text-white rounded hover:bg-black focus:outline-none focus:ring-2 focus:ring-blue-300"
+        >
+          Filtrar
+        </button>
+      </div>
       <div className="flex justify-center">
         <div className="max-w-4xl w-full overflow-x-auto mt-6">
+          <div className="flex justify-end  text-xl font-bold">
+            <div className="flex bg-gray-800 text-white p-1 rounded-lg">
+              <h2 className="mr-4"> TOTAL: </h2>
+              <h2 className="mr-4">{totalAmountRange.toFixed(2)} € </h2>
+            </div>
+          </div>
           <table className="min-w-full table-auto">
             <thead className="bg-gray-800 text-white">
               <tr>
@@ -39,7 +89,7 @@ const HistoryTable = () => {
                 <th className="px-4 py-2 border-2">Fecha</th>
                 <th className="px-4 py-2 border-2">Hora</th>
                 <th className="px-4 py-2 border-2">Vendedor</th>
-                <th className="px-4 py-2 border-2">Importe total (€)</th>
+                <th className="px-4 py-2 border-2">Importe total</th>
               </tr>
             </thead>
             <tbody className="bg-white">
@@ -70,7 +120,7 @@ const HistoryTable = () => {
                     </td>
                     <td className="px-4 py-2 border">{transaction.vendorId}</td>
                     <td className="px-4 py-2 border">
-                      {transaction.totalAmount}
+                      {transaction.totalAmount.toFixed(2)} €
                     </td>
                   </tr>
                   {selectedTransaction === transaction.transactionId && (
@@ -88,18 +138,6 @@ const HistoryTable = () => {
           </table>
         </div>
       </div>
-      {/* <div className="flex justify-center mt-4">
-        <button onClick={() => handleChangePage(page - 1)}>◀-  </button>
-        <p>{page}</p>
-        <button onClick={() => handleChangePage(page + 1)}> -▶</button>
-      </div> */}
-      {/* {selectedProduct && (
-        <ProductDetailModal
-          product={selectedProduct}
-          onClose={handleCloseModal}
-          onDelete={handleDeleteProduct}
-        />
-      )} */}
     </div>
   );
 };
