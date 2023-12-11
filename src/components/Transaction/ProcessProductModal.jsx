@@ -18,7 +18,6 @@ const ProductDetailModal = ({
   const [productNotFound, setProductNotFound] = useState(false);
   const [editing, setEditing] = useState(false);
 
-  let keep;
   useEffect(() => {
     console.log(product);
     console.log("Barcode::", product.barCode);

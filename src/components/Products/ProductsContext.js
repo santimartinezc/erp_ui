@@ -1,6 +1,7 @@
 //ProductContext
 import { createContext, useState, useEffect, useContext } from "react";
 import {
+  createProductAPI,
   deleteProductAPI,
   getAllProductsAPI,
   getProductByBarCodeAPI,
@@ -11,6 +12,7 @@ export const ProductsContext = createContext();
 export function ProductsContextProvider(props) {
   const [page, setPage] = useState(0);
   const [products, setProducts] = useState([]);
+  const [productNotFound, setProductNotFound] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   console.log("aa");
@@ -31,6 +33,12 @@ export function ProductsContextProvider(props) {
     setSelectedProduct(null);
   };
 
+  const handleCreateProduct = async () => {
+    await createProductAPI(selectedProduct);
+    setSelectedProduct(null);
+    await fetchProducts();
+  };
+
   const handleDeleteProduct = async () => {
     const confirmDelete = window.confirm(
       "Quieres borrar el producto? Esta operación no se puede deshacer"
@@ -49,8 +57,14 @@ export function ProductsContextProvider(props) {
 
   const handleSearch = async (barCode) => {
     const fetchedProduct = await getProductByBarCodeAPI(barCode);
-    setSelectedProduct(fetchedProduct);
-    console.log(fetchedProduct)
+    if (!fetchedProduct) {
+      setProductNotFound(true);
+      console.log("No se encontró el producto con código de barras", barCode);
+    } else {
+      setProductNotFound(false);
+      setSelectedProduct(fetchedProduct);
+      console.log(fetchedProduct);
+    }
   };
 
   const updateProductInList = (updatedProduct) => {
@@ -69,14 +83,17 @@ export function ProductsContextProvider(props) {
       value={{
         products,
         fetchProducts,
+        setSelectedProduct,
         selectedProduct,
         handleProductClick,
         handleCloseModal,
+        handleCreateProduct,
         handleDeleteProduct,
         updateProductInList,
         page,
         handleChangePage,
         handleSearch,
+        productNotFound,
       }}
     >
       {props.children}

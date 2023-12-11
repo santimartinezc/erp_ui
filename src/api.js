@@ -39,6 +39,7 @@ export const getProductByBarCodeAPI = async (id) => {
 
 // Crear un nuevo producto
 export const createProductAPI = async (productData) => {
+  console.log("productData:", productData)
   try {
     const response = await axios.post(URL_PRODUCTS, productData);
     return response.data;
@@ -79,7 +80,7 @@ export const getAllTransactionsAPI = async (page) => {
   try {
     const response = await axios.get(
       `http://localhost:8080/api/transactions?page=${page}&size=20`
-      );
+    );
     return response.data;
   } catch (error) {
     console.error("Error al obtener las transacciones", error);
@@ -88,15 +89,33 @@ export const getAllTransactionsAPI = async (page) => {
 
 export const fetchTransactionsBetweenDates = async (startDate, endDate) => {
   try {
-      const response = await axios.get('http://localhost:8080/api/transactions/filter', {
-          params: {
-              createdAtStart: startDate,
-              createdAtEnd: endDate
-          }
-      });
-      return response.data;
+    const response = await axios.get(
+      "http://localhost:8080/api/transactions/filter",
+      {
+        params: {
+          createdAtStart: startDate,
+          createdAtEnd: endDate,
+        },
+      }
+    );
+    return response.data;
   } catch (error) {
-      console.error("Error fetching transactions", error);
+    console.error("Error fetching transactions", error);
+  }
+};
+export const fetchBillingDataBetweenDates = async (period, date) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:8080/api/transactions/${period}`,
+      {
+        params: {
+          day: date,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching transactions", error);
   }
 };
 
@@ -118,11 +137,10 @@ export const createLinesAPI = async (lines, transactionId) => {
   }
 };
 
-
 export const getLinesByTransactionIdAPI = async (id) => {
   try {
     const response = await axios.get(`${URL_LINES}/transaction/${id}`);
-    console.log(response.data)
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("Error al obtener las líneas de la transacción", error);

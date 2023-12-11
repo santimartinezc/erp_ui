@@ -23,18 +23,6 @@ const TransactionTable = () => {
   } = useContext(TransactionContext);
 
   console.log("modalOpened:", modalOpened);
-  // if (productsInCart.length == 0)
-  //   return (
-  //     <div>
-  //       Cesta de la compra vacía
-  //       <ProcessProductModal
-  //         product={selectedProduct}
-  //         onAdd={handleAddProductToCart}
-  //         onClose={handleCloseModal}
-  //         onDelete={handleDeleteProduct}
-  //       />
-  //     </div>
-  //   );
   console.log(productsInCart);
 
   return (
@@ -103,7 +91,7 @@ const TransactionTable = () => {
             onAdd={handleAddProductToCart}
             onModify={handleUpdateProductInCart}
             onClose={handleCloseModal}
-            onFinishTransaction={handleFinishTransaction}
+            onFinishTransaction={handleOpenEndOfTransactionModal}
             onDelete={handleDeleteProduct}
           />
         )}

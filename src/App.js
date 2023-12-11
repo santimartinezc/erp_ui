@@ -22,7 +22,7 @@ const App = () => {
         <div className="flex-1">
           <Routes>
             <Route path="/" element={<ProductView />} />
-            <Route path="/productos" element={<ProductView />} />
+            <Route path="/inventario" element={<ProductView />} />
             <Route path="/historico" element={<HistoryView />} />
             <Route path="/venta" element={<TransactionView />} />
           </Routes>

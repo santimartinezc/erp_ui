@@ -22,7 +22,7 @@ const PersonalizedNavBar = ({ userName }) => {
             <div className="hidden sm:block sm:ml-6">
               <div className="flex space-x-4">
                 <a href="/venta" className="bg-gray-400 text-white px-3 py-2 rounded-md text-sm font-medium">VENTA</a>
-                <a href="/productos" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Productos</a>
+                <a href="/inventario" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Inventario</a>
                 <a href="/historico" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Histórico</a>
               </div>
             </div>
@@ -44,7 +44,7 @@ const PersonalizedNavBar = ({ userName }) => {
       <div className="sm:hidden" id="mobile-menu">
         <div className="px-2 pt-2 pb-3 space-y-1">
           <a href="/venta" className="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium">Realizar venta</a>
-          <a href="/productos" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Productos</a>
+          <a href="/inventario" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Inventario</a>
           <a href="/historico" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Histórico</a>
         </div>
       </div>

@@ -2,6 +2,7 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import {
   deleteTransactionAPI,
+  fetchBillingDataBetweenDates,
   fetchTransactionsBetweenDates,
   getAllTransactionsAPI,
   getLinesByTransactionIdAPI,
@@ -11,6 +12,8 @@ export const HistoryContext = createContext();
 export function HistoryContextProvider(props) {
   const [page, setPage] = useState(0);
   const [transactions, setTransactions] = useState([]);
+  const [weeklyData, setWeeklyData] = useState([]);
+  const [monthlyData, setMonthlyData] = useState([]);
   const [selectedTransaction, setSelectedTransaction] = useState(null);
   const [productsInTransaction, setProductsInTransaction] = useState(null);
   const [startDate, setStartDate] = useState(
@@ -49,11 +52,29 @@ export function HistoryContextProvider(props) {
   };
 
   const fetchTransactionsFiltered = async () => {
+    console.log(startDate);
+    console.log(endDate);
     const fetchedtransactions = await fetchTransactionsBetweenDates(
       new Date(startDate).toISOString().split(".")[0],
       new Date(endDate).toISOString().split(".")[0]
     );
     setTransactions(fetchedtransactions);
+  };
+
+  const fetchWeeklyData = async () => {
+    console.log(startDate);
+    const fetchedWeeklyData = await fetchBillingDataBetweenDates("week",
+      new Date(startDate).toISOString().split(".")[0]
+    );
+    setWeeklyData(fetchedWeeklyData);
+  };
+
+  const fetchMonthlyData = async () => {
+    console.log(startDate);
+    const fetchedMonthlyData = await fetchBillingDataBetweenDates("month",
+      new Date(startDate).toISOString().split(".")[0]
+    );
+    setMonthlyData(fetchedMonthlyData);
   };
 
   const updateTransactionInList = (updatedTransaction) => {
@@ -91,6 +112,10 @@ export function HistoryContextProvider(props) {
         setStartDate,
         endDate,
         setEndDate,
+        fetchWeeklyData,
+        weeklyData,
+        fetchMonthlyData,
+        monthlyData,
       }}
     >
       {props.children}

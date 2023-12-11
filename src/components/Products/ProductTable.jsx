@@ -67,12 +67,13 @@ const ProductsTable = () => {
         </div>
       </div>
       <div className="flex justify-center mt-4">
-        <button onClick={() => handleChangePage(page - 1)}>◀-  </button>
+        <button onClick={() => handleChangePage(page - 1)}>◀- </button>
         <p>{page}</p>
         <button onClick={() => handleChangePage(page + 1)}> -▶</button>
       </div>
       {selectedProduct && (
         <ProductDetailModal
+          operation={"update"}
           product={selectedProduct}
           onClose={handleCloseModal}
           onDelete={handleDeleteProduct}
