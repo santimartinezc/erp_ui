@@ -47,91 +47,99 @@ const ProductDetailModal = ({ operation, product, onClose, onDelete }) => {
   const isButtonDisabled = !isFormValid();
 
   return (
-    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex justify-center items-center">
-      <div className="bg-white p-5 rounded-lg shadow-lg w-1/2">
-        <h2 className="text-xl font-bold mb-4">
-          {operation == "create" && "Crear producto"}
-          {operation == "update" && "Actualizar producto"}
+    <div className="fixed inset-0 bg-gray-800 bg-opacity-75 overflow-y-auto h-full w-full flex justify-center items-center">
+      <div className="bg-white p-8 rounded-xl shadow-2xl w-1/2 mx-4">
+        <h2 className="text-2xl font-bold text-gray-800 mb-6">
+          {operation === "create" ? "Crear producto" : "Actualizar producto"}
         </h2>
-        <form onSubmit={handleSubmit}>
-          {/* Campos del formulario */}
-          <div className="mb-4">
-            <label className="block">Nombre del Producto</label>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-gray-700 font-bold mb-2">
+              Nombre del Producto
+            </label>
             <input
               type="text"
               name="productName"
               value={updatedProduct.productName}
               onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded mt-1"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
-          <div className="mb-4">
-            <label className="block">Código de barras</label>
+          <div>
+            <label className="block text-gray-700 font-bold mb-2">
+              Código de barras
+            </label>
             <input
               type="text"
               name="barCode"
               value={updatedProduct.barCode}
               onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded mt-1"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
+            {barCodeInUse && (
+              <p className="text-red-600 text-sm mt-2">
+                Ya existe un producto con ese código de barras
+              </p>
+            )}
           </div>
-          {barCodeInUse && (
-            <p>Ya existe un producto con ese código de barras</p>
-          )}
-          <div className="mb-4">
-            <label className="block">Precio (€)</label>
+          <div>
+            <label className="block text-gray-700 font-bold mb-2">
+              Precio (€)
+            </label>
             <input
               type="text"
               name="price"
               value={updatedProduct.price}
               onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded mt-1"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
-          <div className="mb-4">
-            <label className="block">Cantidad</label>
+          <div>
+            <label className="block text-gray-700 font-bold mb-2">
+              Cantidad
+            </label>
             <input
               type="text"
               name="quantity"
               value={updatedProduct.quantity}
               onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded mt-1"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
-          <div className="mb-4">
-            <label className="block">Impuestos (%)</label>
+          <div>
+            <label className="block text-gray-700 font-bold mb-2">
+              Impuestos (%)
+            </label>
             <input
               type="text"
               name="taxes_pctg"
               value={updatedProduct.taxes_pctg}
               onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded mt-1"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
-          {/* Agrega más campos según sea necesario */}
-          <div className="flex justify-between">
-            <div>
+          <div className="flex justify-between items-center">
+            <div className="flex space-x-2">
               <button
                 type="submit"
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 ${isButtonDisabled ? 'opacity-50 cursor-not-allowed'"
+                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                 disabled={isButtonDisabled}
               >
-                {operation == "create" && "CREAR"}
-                {operation == "update" && "ACTUALIZAR"}
+                {operation === "create" ? "CREAR" : "ACTUALIZAR"}
               </button>
               <button
                 onClick={onClose}
                 type="button"
-                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700 ml-2"
+                className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50"
               >
                 Cancelar
               </button>
             </div>
-            {operation == "update" && (
+            {operation === "update" && (
               <button
                 onClick={onDelete}
                 type="button"
-                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 ml-2"
+                className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
               >
                 Eliminar
               </button>

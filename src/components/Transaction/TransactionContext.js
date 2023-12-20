@@ -69,6 +69,9 @@ export function TransactionContextProvider(props) {
 
   const handleDeleteProduct = async () => {
     console.log("sacar producto del carrito:", selectedProduct);
+    const productsInCartUpdated = productsInCart.filter(function (product) {
+      return product !== selectedProduct;
+    });
     setSelectedProduct({
       productName: "",
       barCode: "",
@@ -77,6 +80,7 @@ export function TransactionContextProvider(props) {
       taxes_pctg: "",
     });
     setModalOpened(false);
+    setProductsInCart(productsInCartUpdated);
   };
 
   const sendTransaction = async () => {
@@ -130,7 +134,7 @@ export function TransactionContextProvider(props) {
       taxes_pctg: "",
     });
     setEndOfTransactionModalOpened(false);
-    getAllTransactionsAPI(1)
+    getAllTransactionsAPI(1);
   };
 
   return (

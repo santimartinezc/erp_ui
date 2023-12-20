@@ -9,6 +9,7 @@ const ProductDetailModal = ({
   onModify,
   onFinishTransaction,
   onDelete,
+  productsInCart,
 }) => {
   const { handleUpdateProductInCart, handleSearch, selectedProduct } =
     useContext(TransactionContext);
@@ -43,7 +44,7 @@ const ProductDetailModal = ({
   }, [product]);
   useEffect(() => {
     if (selectedProduct) {
-      selectedProduct.quantity=1;
+      selectedProduct.quantity = 1;
       setprocessingProduct(selectedProduct);
     }
   }, [selectedProduct]);
@@ -80,127 +81,137 @@ const ProductDetailModal = ({
   };
   const isButtonDisabled = !isFormValid();
 
-  console.log(processingProduct);
+  const isCartEmpty = !productsInCart;
   return (
-    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex justify-center items-center">
-      <div className="bg-white p-5 shadow-lg w-1/3">
+    <div className="fixed inset-0 bg-gray-600 bg-opacity-75 overflow-y-auto h-full w-full flex justify-center items-center">
+      <div className="bg-white p-4 md:p-6 shadow-xl rounded-lg w-full max-w-2xl mx-4">
         {!editing && (
-          <div className="flex w-full px-4 py-6 bg-white  max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl">
-            {/* <div className="flex"> */}
+          <div className="flex flex-col md:flex-row w-full py-4">
             <input
               type="text"
               value={barCode}
               onChange={(e) => setBarCode(e.target.value)}
               placeholder="Introduce el código de barras"
-              className="w-full px-3 py-2 leading-tight text-gray-700 border shadow appearance-none focus:outline-none focus:shadow-outline"
+              className="w-full mb-4 md:mb-0 md:mr-4 px-3 py-2 text-gray-700 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
             />
             <button
               onClick={() => handleSearch(barCode)}
-              className="px-4 py-2 text-white bg-blue-500 hover:bg-blue-700"
+              className="w-full md:w-auto px-5 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
             >
               Buscar
             </button>
           </div>
         )}
         {productNotFound && (
-          <p className="text-red-600 font-bold">Producto no encontrado</p>
+          <p className="text-red-600 font-bold text-center mt-4">
+            Producto no encontrado
+          </p>
         )}
-        <form onSubmit={handleSubmit}>
-          {/* Campos del formulario */}
-          <div className="mb-1">
-            <label className="block">Nombre del Producto</label>
-            <input
-              type="text"
-              name="productName"
-              value={processingProduct.productName}
-              onChange={handleChange}
-              className="w-full p-2 border border-gray-300 mt-1"
-            />
-          </div>
-          <div className="flex">
-            <div className="mb-1 mr-2">
-              <label className="block">Precio (€)</label>
-              <input
-                type="text"
-                name="price"
-                value={processingProduct.price}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 mt-1"
-              />
-            </div>
-            <div className="mb-1 mr-2">
-              <label className="block">Cantidad</label>
-              <input
-                type="text"
-                name="quantity"
-                value={processingProduct.quantity}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 mt-1"
-              />
-            </div>
-            <div className="mb-1 ">
-              <label className="block">Impuestos (%)</label>
-              <input
-                type="text"
-                name="quantity"
-                value={processingProduct.taxes_pctg}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 mt-1"
-              />
-            </div>
-          </div>
-          <div className="flex justify-between mt-3">
+        <form onSubmit={handleSubmit} className="mt-4">
+          <div className="space-y-4">
             <div>
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Nombre del Producto
+              </label>
+              <input
+                type="text"
+                name="productName"
+                value={processingProduct.productName}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
+              />
+            </div>
+            <div className="flex flex-wrap -mx-2">
+              <div className="px-2 w-full sm:w-1/3 mb-4">
+                <label className="block text-gray-700 text-sm font-bold mb-2">
+                  Precio (€)
+                </label>
+                <input
+                  type="text"
+                  name="price"
+                  value={processingProduct.price}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
+                />
+              </div>
+              <div className="px-2 w-full sm:w-1/3 mb-4">
+                <label className="block text-gray-700 text-sm font-bold mb-2">
+                  Cantidad
+                </label>
+                <input
+                  type="text"
+                  name="quantity"
+                  value={processingProduct.quantity}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
+                />
+              </div>
+              <div className="px-2 w-full sm:w-1/3 mb-4">
+                <label className="block text-gray-700 text-sm font-bold mb-2">
+                  Impuestos (%)
+                </label>
+                <input
+                  type="text"
+                  name="taxes_pctg"
+                  value={processingProduct.taxes_pctg}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
+                />
+              </div>
+            </div>
+            <div className="flex flex-col md:flex-row justify-between items-center mt-6">
+              <div className="flex space-x-2 mb-4 md:mb-0">
+                {!editing && (
+                  <button
+                    type="submit"
+                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed w-full md:w-auto"
+                    disabled={isButtonDisabled}
+                  >
+                    Añadir
+                  </button>
+                )}
+                {!editing && (
+                  <button
+                    onClick={onClose}
+                    type="button"
+                    className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors w-full md:w-auto"
+                  >
+                    Cerrar
+                  </button>
+                )}
+                {editing && (
+                  <button
+                    onClick={() => {
+                      onModify(processingProduct);
+                    }}
+                    type="button"
+                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed w-full md:w-auto"
+                    disabled={isButtonDisabled}
+                  >
+                    Aceptar
+                  </button>
+                )}
+              </div>
               {!editing && (
                 <button
-                  type="submit"
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 ${isButtonDisabled ? 'opacity-50 cursor-not-allowed'"
-                  disabled={isButtonDisabled}
-                >
-                  Añadir
-                </button>
-              )}
-              {!editing && (
-                <button
-                  onClick={onClose}
+                  onClick={onFinishTransaction}
                   type="button"
-                  className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700 ml-2"
+                  className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed w-full md:w-auto"
+                  disabled={isCartEmpty}
                 >
-                  Cerrar
+                  FINALIZAR COMPRA
                 </button>
               )}
               {editing && (
                 <button
-                  onClick={() => {
-                    onModify(processingProduct);
-                  }}
+                  onClick={onDelete}
                   type="button"
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 ${isButtonDisabled ? 'opacity-50 cursor-not-allowed'"
-                  disabled={isButtonDisabled}
+                  className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors w-full md:w-auto"
                 >
-                  Aceptar
+                  Eliminar
                 </button>
               )}
             </div>
-
-            {!editing && (
-              <button
-                onClick={onFinishTransaction}
-                type="button"
-                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700 ml-2"
-              >
-                FINALIZAR COMPRA
-              </button>
-            )}
-            {editing && (
-              <button
-                onClick={onDelete}
-                type="button"
-                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 ml-2"
-              >
-                Eliminar
-              </button>
-            )}
           </div>
         </form>
       </div>

@@ -25,62 +25,79 @@ const TransactionTable = () => {
   console.log("modalOpened:", modalOpened);
   console.log(productsInCart);
 
+  const isCartEmpty = () => {
+    return productsInCart.length == 0;
+  };
+  const isButtonDisabled = isCartEmpty();
+
   return (
     <div className="flex justify-center">
       <div className="max-w-4xl w-full overflow-x-auto mt-6">
-        <table className="min-w-full table-auto">
-          <thead className="bg-gray-800 text-white">
+        <table className="min-w-full table-auto leading-normal">
+          <thead className="bg-blue-800 text-white">
             <tr>
-              <th className="px-4 py-2">ID</th>
-              <th className="px-4 py-2">Nombre del Producto</th>
-              <th className="px-4 py-2">Precio (€)</th>
-              <th className="px-4 py-2">Cantidad</th>
-              <th className="px-4 py-2">Impuestos (%)</th>
-              <th className="px-4 py-2">Importe</th>
+              <th className="px-6 py-3 border-b-2 border-gray-300">ID</th>
+              <th className="px-6 py-3 border-b-2 border-gray-300">
+                Nombre del Producto
+              </th>
+              <th className="px-6 py-3 border-b-2 border-gray-300">
+                Precio (€)
+              </th>
+              <th className="px-6 py-3 border-b-2 border-gray-300">Cantidad</th>
+              <th className="px-6 py-3 border-b-2 border-gray-300">
+                Impuestos (%)
+              </th>
+              <th className="px-6 py-3 border-b-2 border-gray-300">Importe</th>
             </tr>
           </thead>
           <tbody className="bg-white">
             {productsInCart.map((product) => (
               <tr
                 key={product.productId}
-                className="border-b cursor-pointer"
+                className="hover:bg-gray-100 cursor-pointer"
                 onClick={() => handleProductClick(product)}
               >
-                <td className="px-4 py-2 border">{product.productId}</td>
-                <td className="px-4 py-2 border">{product.productName}</td>
-                <td className="px-4 py-2 border">
+                <td className="px-6 py-4 border-b border-gray-300">
+                  {product.productId}
+                </td>
+                <td className="px-6 py-4 border-b border-gray-300">
+                  {product.productName}
+                </td>
+                <td className="px-6 py-4 border-b border-gray-300">
                   {parseFloat(product.price).toFixed(2)}€
                 </td>
-                <td className="px-4 py-2 border">{product.quantity}</td>
-                <td className="px-4 py-2 border">
+                <td className="px-6 py-4 border-b border-gray-300">
+                  {product.quantity}
+                </td>
+                <td className="px-6 py-4 border-b border-gray-300">
                   {product.taxes_pctg.toFixed(2)}%
                 </td>
-                <td className="px-4 py-2 border">
+                <td className="px-6 py-4 border-b border-gray-300">
                   {(product.quantity * product.price).toFixed(2)}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        <div className="flex justify-end bg-blue-500 text-xl font-bold">
-          <h2 className="mr-4">IMPORTE TOTAL: </h2>
-          <h2 className="mr-4">{totalAmount.toFixed(2)} € </h2>
+        <div className="flex justify-end bg-blue-700 text-white text-xl font-bold py-3 px-6">
+          <h2 className="mr-4">IMPORTE TOTAL:</h2>
+          <h2>{totalAmount.toFixed(2)} €</h2>
         </div>
 
         <div className="flex justify-center mt-4">
           <button
             onClick={handleOpenModal}
-            className="bg-gray-800 hover:bg-gray-900 text-white font-bold py-2 px-4"
+            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full transition-colors"
           >
             +
           </button>
         </div>
         <div className="flex justify-end mt-4">
           <button
-            // onClick={() => {}}
             onClick={handleOpenEndOfTransactionModal}
             type="button"
-            className=" bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700 mt-2"
+            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={isButtonDisabled}
           >
             FINALIZAR COMPRA
           </button>

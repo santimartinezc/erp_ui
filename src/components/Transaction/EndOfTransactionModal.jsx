@@ -29,7 +29,7 @@ const EndOfTransactionModal = ({ onFinish, onCancel }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-600 bg-opacity-75 overflow-y-auto h-full w-full flex justify-center items-center z-50">
+    <div className="fixed inset-0 bg-gray-800 bg-opacity-75 overflow-y-auto h-full w-full flex justify-center items-center z-50">
       <div className="bg-white p-8 rounded-lg shadow-xl w-1/3">
         <h2 className="text-xl font-semibold mb-4">Finalizar Transacción</h2>
         <div className="mb-4">
@@ -55,15 +55,15 @@ const EndOfTransactionModal = ({ onFinish, onCancel }) => {
           </label>
           <p className="p-2 bg-gray-100 rounded">{changeDue.toFixed(2)}</p>
         </div>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between space-x-4">
           <button
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
             onClick={onCancel}
           >
             Cancelar
           </button>
           <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
             onClick={onFinish}
           >
             Finalizar

@@ -34,30 +34,36 @@ const ProductsTable = () => {
     <div>
       <div className="flex justify-center">
         <div className="max-w-4xl w-full overflow-x-auto mt-6">
-          <table className="min-w-full table-auto">
-            <thead className="bg-gray-800 text-white">
+          <table className="min-w-full table-auto bg-white shadow-md rounded-lg">
+            <thead className="bg-blue-800 text-white">
               <tr>
-                <th className="px-4 py-2">ID</th>
-                <th className="px-4 py-2">Nombre del Producto</th>
-                <th className="px-4 py-2">Precio (€)</th>
-                <th className="px-4 py-2">Cantidad</th>
-                <th className="px-4 py-2">Impuestos (%)</th>
+                <th className="px-6 py-3 text-left">ID</th>
+                <th className="px-6 py-3 text-left">Nombre del Producto</th>
+                <th className="px-6 py-3 text-left">Precio (€)</th>
+                <th className="px-6 py-3 text-left">Cantidad</th>
+                <th className="px-6 py-3 text-left">Impuestos (%)</th>
               </tr>
             </thead>
-            <tbody className="bg-white">
+            <tbody>
               {productsToShow.map((product) => (
                 <tr
                   key={product.productId}
-                  className="border-b cursor-pointer"
+                  className="border-b last:border-none hover:bg-gray-100 cursor-pointer"
                   onClick={() => handleProductClick(product)}
                 >
-                  <td className="px-4 py-2 border">{product.productId}</td>
-                  <td className="px-4 py-2 border">{product.productName}</td>
-                  <td className="px-4 py-2 border">
+                  <td className="px-6 py-4 text-gray-700">
+                    {product.productId}
+                  </td>
+                  <td className="px-6 py-4 text-gray-700">
+                    {product.productName}
+                  </td>
+                  <td className="px-6 py-4 text-gray-700">
                     {parseFloat(product.price).toFixed(2)}€
                   </td>
-                  <td className="px-4 py-2 border">{product.quantity}</td>
-                  <td className="px-4 py-2 border">
+                  <td className="px-6 py-4 text-gray-700">
+                    {product.quantity}
+                  </td>
+                  <td className="px-6 py-4 text-gray-700">
                     {product.taxes_pctg.toFixed(2)}%
                   </td>
                 </tr>
@@ -66,10 +72,22 @@ const ProductsTable = () => {
           </table>
         </div>
       </div>
-      <div className="flex justify-center mt-4">
-        <button onClick={() => handleChangePage(page - 1)}>◀- </button>
-        <p>{page}</p>
-        <button onClick={() => handleChangePage(page + 1)}> -▶</button>
+      <div className="flex justify-center mt-6 mb-3">
+        <button
+          onClick={() => handleChangePage(page - 1)}
+          className="text-white bg-blue-500 hover:bg-blue-600 font-bold py-2 px-4 rounded-l-lg"
+        >
+          ◀
+        </button>
+        <p className="py-2 px-4 bg-white border-t border-b text-gray-700">
+          {page}
+        </p>
+        <button
+          onClick={() => handleChangePage(page + 1)}
+          className="text-white bg-blue-500 hover:bg-blue-600 font-bold py-2 px-4 rounded-r-lg"
+        >
+          ▶
+        </button>
       </div>
       {selectedProduct && (
         <ProductDetailModal

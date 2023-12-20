@@ -48,7 +48,10 @@ const DailyGraph = () => {
         const transactionHour = new Date(transaction.createdAt).getHours();
         return transactionHour === hour;
       })
-      .reduce((sum, transaction) => sum + transaction.totalAmount, 0);
+      .reduce(
+        (sum, transaction) => sum + transaction.totalAmount.toFixed(2),
+        0
+      );
   });
 
   const dataDaily = {
